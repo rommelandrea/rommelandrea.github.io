@@ -1,8 +1,8 @@
 ---
-import Layout from './Layout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import ShareButtons from '../components/ShareButtons.astro';
 import TagList from '../components/TagList.astro';
+import Layout from './Layout.astro';
 import './styles/markdown.css';
 export interface Props {
   title: string;
@@ -14,58 +14,82 @@ export interface Props {
   tags?: string[];
 }
 
-const { title, description, pubDate, updatedDate, heroImage, readingTime = '5 min read', tags = [] } = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  readingTime = '5 min read',
+  tags = [],
+} = Astro.props;
 
-// Fix for the canonicalURL creation
-let canonicalURL;
+// Create canonical URL
+let canonicalURL: URL;
 try {
-  canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://example.com');
+  canonicalURL = new URL(
+    Astro.url.pathname,
+    Astro.site || 'https://example.com',
+  );
 } catch (error) {
   console.error('Error creating canonical URL:', error);
   canonicalURL = new URL('https://example.com');
 }
 
-const slug = Astro.url.pathname.split('/').filter(Boolean).pop() || ''; // Ensure slug is a string
-
-// Xử lý heroImage an toàn hơn - hỗ trợ cả URL tuyệt đối và đường dẫn tương đối
+// Process heroImage - support both absolute URLs and relative paths
 let heroImageUrl = null;
+let ogImageUrl = null;
 if (heroImage) {
   try {
-    // Kiểm tra nếu là URL đầy đủ
+    // Check if it's a full URL
     if (heroImage.startsWith('http')) {
       heroImageUrl = heroImage;
-    } 
-    // Kiểm tra nếu là đường dẫn tương đối
+      ogImageUrl = heroImage;
+    }
+    // Check if it's a relative path
     else if (heroImage.startsWith('/')) {
-      // Nếu Astro.site tồn tại, sử dụng nó làm cơ sở
+      // If Astro.site exists, use it as base
       if (Astro.site) {
-        heroImageUrl = new URL(heroImage, Astro.site).toString();
-      } 
-      // Nếu không, sử dụng đường dẫn tương đối như đã cung cấp
+        heroImageUrl = heroImage;
+        ogImageUrl = new URL(heroImage, Astro.site).toString();
+      }
+      // Otherwise, use the relative path as provided
       else {
         heroImageUrl = heroImage;
+        ogImageUrl = heroImage;
       }
     }
-    // Trường hợp khác
+    // Other cases
     else {
       heroImageUrl = heroImage;
+      ogImageUrl = heroImage;
     }
   } catch (error) {
     console.error(`Error processing heroImage: ${heroImage}`, error);
-    // Sử dụng đường dẫn gốc nếu có lỗi
+    // Use original path if there's an error
     heroImageUrl = heroImage;
+    ogImageUrl = heroImage;
   }
 }
 ---
 
-<Layout title={title} description={description}>
-  <article class="prose dark:prose-invert prose-zinc lg:prose-lg mx-auto max-w-4xl">
-    <div class="mb-12">
-      <h1 class="mb-4 text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-5xl">
+<Layout 
+  title={title} 
+  description={description}
+  type="article"
+  image={ogImageUrl || undefined}
+  url={canonicalURL.pathname}
+  publishedTime={pubDate}
+  modifiedTime={updatedDate}
+  tags={tags}
+>
+  <article class="prose dark:prose-invert prose-zinc lg:prose-lg mx-auto max-w-4xl px-4 sm:px-6">
+    <div class="mb-8 sm:mb-12">
+      <h1 class="mb-4 text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
         {title}
       </h1>
       
-      <div class="flex items-center gap-x-4 text-sm text-zinc-500 dark:text-zinc-400 mb-6">
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mb-4 sm:mb-6">
         <FormattedDate date={pubDate} />
         {readingTime && <span>· {readingTime}</span>}
       </div>
@@ -73,8 +97,8 @@ if (heroImage) {
       <TagList tags={tags} class="mt-2" />
     </div>
     
-    <!-- Hero image with improved styling -->
-    {heroImage && (
+    <!-- Hero image with improved styling and responsive sizing -->
+    {heroImage && heroImageUrl && (
       <div class="relative mb-8 sm:mb-12 overflow-hidden rounded-xl shadow-lg">
         <div class="aspect-[16/9] w-full">
           <img 
@@ -82,6 +106,7 @@ if (heroImage) {
             alt={title}
             class="w-full h-full object-cover"
             loading="eager"
+            onerror="this.style.display='none'; this.parentElement.parentElement.style.display='none';"
           />
         </div>
         <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
@@ -92,15 +117,15 @@ if (heroImage) {
       <slot />
     </div>
     
-    <!-- Add the like button after the content -->
-    <div class="mt-12 pt-8 border-t border-zinc-200 dark:border-zinc-800">
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
-        <ShareButtons url={canonicalURL.toString()} title={title} /> <!-- Convert URL to string -->
+    <!-- Share buttons after the content -->
+    <div class="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-zinc-200 dark:border-zinc-800">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
+        <ShareButtons url={canonicalURL.toString()} title={title} />
       </div>
     </div>
     
     {updatedDate && (
-      <div class="mt-8 text-sm text-zinc-500 dark:text-zinc-400 italic">
+      <div class="mt-6 sm:mt-8 text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 italic">
         Last updated on <FormattedDate date={updatedDate} />
       </div>
     )}

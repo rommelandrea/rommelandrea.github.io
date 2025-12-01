@@ -1,19 +1,25 @@
 ---
 import { getCollection } from 'astro:content';
-import Layout from '../layouts/Layout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from '../consts';
+import Layout from '../layouts/Layout.astro';
 
 // Get all blog posts
 const allPosts = await getCollection('blog');
 
-// Get the 3 most recent posts
+// Get the 9 most recent posts
 const recentPosts = allPosts
-  .filter(post => !post.data.draft)
+  .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-  .slice(0, 3);
+  .slice(0, 9);
 ---
 
-<Layout title="Home | My Blog">
+<Layout 
+  title={`Home | ${SITE_TITLE}`}
+  description={SITE_DESCRIPTION}
+  type="website"
+  url={SITE_URL}
+>
   <!-- Hero Section with improved mobile responsiveness -->
   <section class="py-10 sm:py-16 md:py-20 px-4 sm:px-6 theme-transition-all">
     <div class="max-w-2xl mx-auto relative">
@@ -76,10 +82,10 @@ const recentPosts = allPosts
           <article class="group relative flex flex-col items-start hover-3d theme-transition-element max-w-sm mx-auto sm:mx-0 w-full">
             <div class="absolute -inset-x-4 -inset-y-6 z-0 scale-95 bg-zinc-50 dark:bg-zinc-800/50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 sm:-inset-x-6 sm:rounded-2xl theme-transition-bg"></div>
 
-            {post.data.image && (
+            {post.data.heroImage && (
               <div class="relative z-10 w-full aspect-video mb-4 overflow-hidden rounded-lg">
                 <img
-                  src={post.data.image}
+                  src={post.data.heroImage}
                   alt={post.data.title}
                   class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading={index === 0 ? "eager" : "lazy"}
