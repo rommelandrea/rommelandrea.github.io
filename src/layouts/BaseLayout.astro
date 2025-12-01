@@ -1,0 +1,57 @@
+---
+import Layout from './Layout.astro';
+
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "My personal blog" } = Astro.props;
+---
+
+<Layout title={title} description={description}>
+  <slot />
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('theme-toggle');
+
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        document.documentElement.classList.add('theme-switching');
+
+        const rippleElements = document.querySelectorAll('.theme-ripple');
+        rippleElements.forEach(el => {
+          el.classList.add('ripple-active');
+          setTimeout(() => {
+            el.classList.remove('ripple-active');
+          }, 600);
+        });
+
+        const event = new CustomEvent('themeChange', {
+          detail: {
+            theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+          }
+        });
+        document.dispatchEvent(event);
+
+        setTimeout(() => {
+          document.documentElement.classList.remove('theme-switching');
+        }, 600);
+      });
+    }
+
+    // Đảm bảo social links luôn hiển thị đúng
+    const socialLinks = document.querySelectorAll('.social-link');
+    socialLinks.forEach(link => {
+      link.addEventListener('mouseenter', () => {
+        link.classList.add('hover-active');
+      });
+
+      link.addEventListener('mouseleave', () => {
+        link.classList.remove('hover-active');
+      });
+    });
+  });
+</script>
