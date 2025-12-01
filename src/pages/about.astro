@@ -27,8 +27,8 @@ const skills = [
   },
 ];
 ---
-<BaseLayout 
-  title="About Me" 
+<BaseLayout
+  title="About Me"
   description="Learn more about my background, skills, and experience"
   type="website"
   url={`${SITE_URL}/about`}
@@ -421,91 +421,44 @@ const skills = [
 </script>
 
 <script>
-  // Handle SPA transitions for about page
-  function setupSPATransitions() {
-    // Handle all internal links for SPA transitions
-    document.querySelectorAll('a[href^="/"]').forEach(link => {
-      // Skip links that are anchor links, external links, or already processed
-      if (link.getAttribute('href').includes('#') ||
-          link.getAttribute('target') === '_blank' ||
-          link.hasAttribute('data-spa-handled')) {
-        return;
-      }
-
-      // Mark as handled to avoid duplicate listeners
-      link.setAttribute('data-spa-handled', 'true');
-
-      link.addEventListener('click', (e) => {
-        // Don't handle if modifier keys are pressed (for opening in new tab, etc.)
-        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
-          return;
-        }
-
-        e.preventDefault();
-        const targetHref = link.getAttribute('href');
-
-        // Trigger page transition animation
-        const pageTransition = document.getElementById('page-transition');
-        if (pageTransition) {
-          pageTransition.classList.remove('opacity-0');
-          pageTransition.classList.add('opacity-100');
-
-          // Navigate after transition effect
-          setTimeout(() => {
-            window.location.href = targetHref;
-          }, 300);
-        } else {
-          // Fallback if transition element doesn't exist
-          window.location.href = targetHref;
-        }
-      });
+  // Initialize animations for about page
+  function animateAboutContent() {
+    // Animate hero section elements
+    const heroElements = document.querySelectorAll('h1, .order-2 p, .social-links-container');
+    heroElements.forEach((el, index) => {
+      setTimeout(() => {
+        el.classList.add('animate-reveal');
+      }, 100 + (index * 150));
     });
 
-    // Initialize animations for about page
-    function animateAboutContent() {
-      // Animate hero section elements
-      const heroElements = document.querySelectorAll('h1, .order-2 p, .social-links-container');
-      heroElements.forEach((el, index) => {
-        setTimeout(() => {
-          el.classList.add('animate-reveal');
-        }, 100 + (index * 150));
-      });
-
-      // Animate profile image
-      const profileImage = document.querySelector('.aspect-square');
-      if (profileImage) {
-        setTimeout(() => {
-          profileImage.classList.add('animate-reveal');
-        }, 200);
-      }
-
-      // Animate skill bars with staggered delay
-      const skillBars = document.querySelectorAll('.skill-bar');
-      skillBars.forEach((bar, index) => {
-        setTimeout(() => {
-          bar.classList.add('animate-skill');
-        }, 500 + (index * 100));
-      });
-
-      // Animate sections with staggered delay
-      const sections = document.querySelectorAll('section');
-      sections.forEach((section, index) => {
-        setTimeout(() => {
-          section.classList.add('animate-reveal');
-        }, 300 + (index * 200));
-      });
+    // Animate profile image
+    const profileImage = document.querySelector('.aspect-square');
+    if (profileImage) {
+      setTimeout(() => {
+        profileImage.classList.add('animate-reveal');
+      }, 200);
     }
 
-    // Run animations
-    animateAboutContent();
+    // Animate skill bars with staggered delay
+    const skillBars = document.querySelectorAll('.skill-bar');
+    skillBars.forEach((bar, index) => {
+      setTimeout(() => {
+        bar.classList.add('animate-skill');
+      }, 500 + (index * 100));
+    });
+
+    // Animate sections with staggered delay
+    const sections = document.querySelectorAll('section');
+    sections.forEach((section, index) => {
+      setTimeout(() => {
+        section.classList.add('animate-reveal');
+      }, 300 + (index * 200));
+    });
   }
 
-  // Initialize on first load
-  document.addEventListener('DOMContentLoaded', setupSPATransitions);
+  // Initialize animations on page load
+  document.addEventListener('DOMContentLoaded', animateAboutContent);
 
-  // Re-initialize when content changes via Astro's view transitions
-  document.addEventListener('astro:page-load', setupSPATransitions);
-
-  // For compatibility with custom transition system
-  document.addEventListener('page-transition-complete', setupSPATransitions);
+  // Re-initialize when content changes via SPA transitions
+  document.addEventListener('spa-content-loaded', animateAboutContent);
 </script>

@@ -14,7 +14,7 @@ const recentPosts = allPosts
   .slice(0, 9);
 ---
 
-<Layout 
+<Layout
   title={`Home | ${SITE_TITLE}`}
   description={SITE_DESCRIPTION}
   type="website"
@@ -330,55 +330,7 @@ const recentPosts = allPosts
     }
   });
 
-  // SPA transition handling for homepage
-  function setupSPATransitions() {
-    // Handle all internal links for SPA transitions
-    document.querySelectorAll('a[href^="/"]').forEach(link => {
-      // Skip links that are anchor links, external links, or already processed
-      if (link.getAttribute('href').includes('#') ||
-          link.getAttribute('target') === '_blank' ||
-          link.hasAttribute('data-spa-handled')) {
-        return;
-      }
-
-      // Mark as handled to avoid duplicate listeners
-      link.setAttribute('data-spa-handled', 'true');
-
-      link.addEventListener('click', (e) => {
-        // Don't handle if modifier keys are pressed (for opening in new tab, etc.)
-        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
-          return;
-        }
-
-        e.preventDefault();
-        const targetHref = link.getAttribute('href');
-
-        // Trigger page transition animation
-        const pageTransition = document.getElementById('page-transition');
-        if (pageTransition) {
-          pageTransition.classList.remove('opacity-0');
-          pageTransition.classList.add('opacity-100');
-
-          // Navigate after transition effect
-          setTimeout(() => {
-            window.location.href = targetHref;
-          }, 300);
-        } else {
-          // Fallback if transition element doesn't exist
-          window.location.href = targetHref;
-        }
-      });
-    });
-  }
-
-  // Initialize on first load
-  document.addEventListener('DOMContentLoaded', setupSPATransitions);
-
-  // Re-initialize when content changes via Astro's view transitions
-  document.addEventListener('astro:page-load', setupSPATransitions);
-
-  // For compatibility with custom transition system
-  document.addEventListener('page-transition-complete', setupSPATransitions);
+  // SPA transitions are handled by Layout.astro
 </script>
 
 <style>

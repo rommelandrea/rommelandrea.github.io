@@ -126,18 +126,31 @@ const {
 
             // Replace the content
             if (mainContent && newContent) {
+              // Store scripts before replacing innerHTML (which removes them)
+              const scriptsToExecute = Array.from(newContent.querySelectorAll('script')).map(oldScript => {
+                return {
+                  attributes: Array.from(oldScript.attributes).map(attr => ({
+                    name: attr.name,
+                    value: attr.value
+                  })),
+                  textContent: oldScript.textContent
+                };
+              });
+
+              // Replace content
               mainContent.innerHTML = newContent.innerHTML;
 
-              // Run scripts in the new content
-              Array.from(newContent.querySelectorAll('script')).forEach(oldScript => {
+              // Execute scripts from the new content
+              scriptsToExecute.forEach(scriptData => {
                 const newScript = document.createElement('script');
-                Array.from(oldScript.attributes).forEach(attr => {
+                scriptData.attributes.forEach(attr => {
                   newScript.setAttribute(attr.name, attr.value);
                 });
-                newScript.textContent = oldScript.textContent;
-                if (oldScript.parentNode) {
-                  mainContent.appendChild(newScript);
-                }
+                newScript.textContent = scriptData.textContent;
+                // Append to body to ensure scripts execute
+                document.body.appendChild(newScript);
+                // Remove after execution to avoid duplicates
+                setTimeout(() => newScript.remove(), 0);
               });
             }
 
@@ -167,10 +180,17 @@ const {
               }, 200);
             }
 
-            // Dispatch custom event for content loaded
-            document.dispatchEvent(new CustomEvent('spa-content-loaded', {
-              detail: { url }
-            }));
+            // Verify content was replaced
+            if (!mainContent || mainContent.innerHTML.trim() === '') {
+              throw new Error('Content replacement failed - main content is empty');
+            }
+
+            // Dispatch custom event for content loaded (after a short delay to ensure DOM is ready)
+            setTimeout(() => {
+              document.dispatchEvent(new CustomEvent('spa-content-loaded', {
+                detail: { url }
+              }));
+            }, 100);
 
             // Scroll to top or to saved position
             window.scrollTo(0, 0);
@@ -186,58 +206,12 @@ const {
           }
         }
 
-        // Function to attach event listeners to all links
-        function attachLinkListeners() {
-          document.querySelectorAll('a').forEach(link => {
-            // Skip links that are already handled, anchor links, external links, or have special attributes
-            if (
-              link.hasAttribute('data-spa-handled') ||
-              !link.href.startsWith(window.location.origin) ||
-              link.href.includes('#') ||
-              link.hasAttribute('target') ||
-              link.hasAttribute('download') ||
-              link.getAttribute('rel') === 'external' ||
-              link.getAttribute('rel') === 'nofollow'
-            ) {
-              return;
-            }
-
-            // Mark as handled to avoid duplicate listeners
-            link.setAttribute('data-spa-handled', 'true');
-
-            link.addEventListener('click', (e) => {
-              // Don't handle if modifier keys are pressed (for opening in new tab, etc.)
-              if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
-                return;
-              }
-
-              e.preventDefault();
-              const targetHref = link.href;
-
-              // Don't transition if clicking the current page
-              if (targetHref === window.location.href) {
-                return;
-              }
-
-              // Update browser history
-              window.history.pushState({ path: targetHref }, '', targetHref);
-
-              // Load the new content
-              loadContent(targetHref);
-            });
-          });
-        }
-
-        // Initial attachment of link listeners
-        attachLinkListeners();
+        // Navigation uses standard browser behavior for reliability
+        // This ensures content always loads correctly when navigating between pages
 
         // Handle browser back/forward navigation
-        window.addEventListener('popstate', (e) => {
-          if (e.state && e.state.path) {
-            loadContent(e.state.path);
-          } else {
-            loadContent(window.location.href);
-          }
+        window.addEventListener('popstate', () => {
+          window.location.reload();
         });
 
         // Check RSS feed availability
