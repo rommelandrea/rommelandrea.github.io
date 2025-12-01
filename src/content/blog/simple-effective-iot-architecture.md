@@ -2,7 +2,7 @@
 title: "Simple and effective architecture for managing IoT data at scale"
 description: "An architectural approach that allows you to start simply but with solid scalability foundations for IoT data management."
 pubDate: 2025-10-07
-heroImage: "/1759406728098.jpg"
+heroImage: "/simple-effective-iot-architecture.png"
 readingTime: "3 min read"
 tags: ["iot", "architecture", "kafka", "mqtt", "timescaledb"]
 ---
