@@ -37,8 +37,8 @@ try {
 }
 
 // Process heroImage - support both absolute URLs and relative paths
-let heroImageUrl = null;
-let ogImageUrl = null;
+let heroImageUrl: string | null = null;
+let ogImageUrl: string | null = null;
 if (heroImage) {
   try {
     // Check if it's a full URL
