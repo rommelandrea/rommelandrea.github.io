@@ -1,47 +1,52 @@
 ---
 import { getCollection } from 'astro:content';
+import readingTime from 'reading-time';
 import BlogPost from '../../layouts/BlogPost.astro';
-import readingTime from 'reading-time'; // Thêm import này nếu chưa có
 
 export async function getStaticPaths() {
-  const blogEntries = await getCollection('blog');
-  
+  // Filter out draft posts - only generate routes for published posts
+  const blogEntries = await getCollection('blog', ({ data }) => !data.draft);
+
   // Sort entries by date for better next/prev navigation
   const sortedEntries = [...blogEntries].sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
   );
-  
+
   return sortedEntries.map((entry, index) => {
-    // Tính toán readingTime từ nội dung markdown
+    // Calculate reading time from markdown content
     const readingTimeResult = readingTime(entry.body);
-    
-    // Định dạng thời gian đọc thành chuỗi dễ đọc
-    let readingTimeStr;
+
+    // Format reading time as a readable string
+    let readingTimeStr: string;
     if (readingTimeResult.minutes < 1) {
-      readingTimeStr = 'Dưới 1 phút đọc';
+      readingTimeStr = 'Less than 1 min read';
     } else {
-      // Làm tròn lên và định dạng thành "X phút đọc"
+      // Round up and format as "X min read"
       const minutes = Math.ceil(readingTimeResult.minutes);
-      readingTimeStr = `${minutes} phút đọc`;
+      readingTimeStr = `${minutes} min read`;
     }
-    
+
     return {
       params: { slug: entry.slug },
-      props: { 
+      props: {
         entry,
-        readingTimeValue: readingTimeStr, // Truyền chuỗi đã định dạng
-        readingTimeStats: readingTimeResult, // Truyền toàn bộ thông tin thống kê
+        readingTimeValue: readingTimeStr,
+        readingTimeStats: readingTimeResult,
         nextPost: index > 0 ? sortedEntries[index - 1] : null,
-        prevPost: index < sortedEntries.length - 1 ? sortedEntries[index + 1] : null
+        prevPost:
+          index < sortedEntries.length - 1 ? sortedEntries[index + 1] : null,
       },
     };
   });
 }
 
-const { entry, nextPost, prevPost, readingTimeValue, readingTimeStats } = Astro.props;
+const { entry, nextPost, prevPost, readingTimeValue, readingTimeStats } =
+  Astro.props;
+
+// Render the entry content
 const { Content } = await entry.render();
 
-// Ghi đè readingTime từ frontmatter nếu có, nếu không thì sử dụng giá trị đã tính
+// Override readingTime from frontmatter if available, otherwise use calculated value
 const finalReadingTime = entry.data.readingTime || readingTimeValue;
 ---
 
@@ -52,43 +57,45 @@ const finalReadingTime = entry.data.readingTime || readingTimeValue;
       <Content />
     </div>
 
-    <!-- Next/Previous Navigation - Improved responsive design -->
-    <div class="mt-12 sm:mt-16 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 border-t border-zinc-200 dark:border-zinc-800 pt-8 sm:pt-12">
-      {prevPost && (
-        <a 
-          href={`/blog/${prevPost.slug}`} 
-          class="group relative flex flex-col h-full p-4 sm:p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
-        >
-          <div class="absolute inset-0 bg-gradient-to-r from-zinc-100 to-transparent dark:from-zinc-800 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <span class="relative z-10 text-xs sm:text-sm font-medium text-zinc-500 dark:text-zinc-400 flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 group-hover:-translate-x-1">
-              <path d="m15 18-6-6 6-6"></path>
-            </svg>
-            Previous Article
-          </span>
-          <h3 class="text-base sm:text-lg font-medium text-zinc-900 dark:text-white line-clamp-2 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 transition-colors">
-            {prevPost.data.title}
-          </h3>
-        </a>
-      )}
-      {nextPost && (
-        <a 
-          href={`/blog/${nextPost.slug}`} 
-          class="group relative flex flex-col h-full p-4 sm:p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all duration-300 hover:-translate-y-1 md:text-right overflow-hidden"
-        >
-          <div class="absolute inset-0 bg-gradient-to-l from-zinc-100 to-transparent dark:from-zinc-800 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <span class="relative z-10 text-xs sm:text-sm font-medium text-zinc-500 dark:text-zinc-400 flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2 md:justify-end">
-            Next Article
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 group-hover:translate-x-1">
-              <path d="m9 18 6-6-6-6"></path>
-            </svg>
-          </span>
-          <h3 class="text-base sm:text-lg font-medium text-zinc-900 dark:text-white line-clamp-2 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 transition-colors">
-            {nextPost.data.title}
-          </h3>
-        </a>
-      )}
-    </div>
+    <!-- Next/Previous Navigation - Improved responsive design, only showing published posts -->
+    {(prevPost || nextPost) && (
+      <div class="mt-8 sm:mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 border-t border-zinc-200 dark:border-zinc-800 pt-6 sm:pt-8 md:pt-12">
+        {prevPost && !prevPost.data.draft && (
+          <a 
+            href={`/blog/${prevPost.slug}`} 
+            class="group relative flex flex-col h-full p-4 sm:p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+          >
+            <div class="absolute inset-0 bg-gradient-to-r from-zinc-100 to-transparent dark:from-zinc-800 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <span class="relative z-10 text-xs sm:text-sm font-medium text-zinc-500 dark:text-zinc-400 flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 group-hover:-translate-x-1">
+                <path d="m15 18-6-6 6-6"></path>
+              </svg>
+              Previous Article
+            </span>
+            <h3 class="text-sm sm:text-base md:text-lg font-medium text-zinc-900 dark:text-white line-clamp-2 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 transition-colors">
+              {prevPost.data.title}
+            </h3>
+          </a>
+        )}
+        {nextPost && !nextPost.data.draft && (
+          <a 
+            href={`/blog/${nextPost.slug}`} 
+            class="group relative flex flex-col h-full p-4 sm:p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all duration-300 hover:-translate-y-1 md:text-right overflow-hidden"
+          >
+            <div class="absolute inset-0 bg-gradient-to-l from-zinc-100 to-transparent dark:from-zinc-800 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <span class="relative z-10 text-xs sm:text-sm font-medium text-zinc-500 dark:text-zinc-400 flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2 md:justify-end">
+              Next Article
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 group-hover:translate-x-1">
+                <path d="m9 18 6-6-6-6"></path>
+              </svg>
+            </span>
+            <h3 class="text-sm sm:text-base md:text-lg font-medium text-zinc-900 dark:text-white line-clamp-2 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 transition-colors">
+              {nextPost.data.title}
+            </h3>
+          </a>
+        )}
+      </div>
+    )}
 </BlogPost>
 
 <script>

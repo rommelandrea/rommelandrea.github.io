@@ -1,33 +1,38 @@
 ---
+import { FaJs, FaNodeJs, FaPython, FaReact } from 'react-icons/fa';
+import { SiKubernetes, SiTypescript } from 'react-icons/si';
+import { SITE_URL } from '../consts';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { FaJs, FaReact, FaNodeJs, FaPython } from 'react-icons/fa';
-import { SiTypescript, SiKubernetes } from 'react-icons/si';
-
 
 const skills = [
   {
-    name: "Kubernetes",
+    name: 'Kubernetes',
     level: 85,
-    icon: SiKubernetes
+    icon: SiKubernetes,
   },
   {
-    name: "TypeScript",
+    name: 'TypeScript',
     level: 85,
-    icon: SiTypescript
+    icon: SiTypescript,
   },
   {
-    name: "Angular",
+    name: 'Angular',
     level: 65,
-    icon: FaReact
+    icon: FaReact,
   },
   {
-    name: "Node.js",
+    name: 'Node.js',
     level: 82,
-    icon: FaNodeJs
+    icon: FaNodeJs,
   },
 ];
 ---
-<BaseLayout title="About Me" description="Learn more about my background, skills, and experience">
+<BaseLayout 
+  title="About Me" 
+  description="Learn more about my background, skills, and experience"
+  type="website"
+  url={`${SITE_URL}/about`}
+>
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-16 theme-transition-all">
     <!-- Hero Section - Improved mobile layout -->
     <div class="relative mb-12 sm:mb-16 md:mb-20">
@@ -53,7 +58,7 @@ const skills = [
         <div class="order-1 md:order-2 relative">
           <div class="aspect-square w-full max-w-[280px] sm:max-w-[320px] md:max-w-md mx-auto overflow-hidden rounded-3xl border-4 sm:border-8 border-white dark:border-zinc-800 shadow-xl sm:shadow-2xl theme-transition-all">
             <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
+              src="/me.jpg"
               alt="Profile photo"
               class="w-full h-full object-cover"
               loading="eager"

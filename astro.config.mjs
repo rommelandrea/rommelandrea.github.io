@@ -1,6 +1,7 @@
-import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react'; // Add this line
+import sitemap from '@astrojs/sitemap';
+import tailwind from '@astrojs/tailwind';
+import { defineConfig } from 'astro/config';
 
 // Determine site URL based on environment
 // const getSiteURL = () => {
@@ -20,8 +21,5 @@ import react from '@astrojs/react'; // Add this line
 export default defineConfig({
   site: 'https://rommelandrea.github.io',
   // base: '/rommelandrea.github.io',
-  integrations: [
-    tailwind(),
-    react(),
-  ],
+  integrations: [tailwind(), react(), sitemap()],
 });
