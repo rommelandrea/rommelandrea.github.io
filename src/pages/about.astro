@@ -47,7 +47,7 @@ const skills = [
           </h1>
 
           <p class="text-lg sm:text-xl text-zinc-600 dark:text-zinc-400 mb-6 sm:mb-8 leading-relaxed theme-transition-color">
-            A software architect expert in Node.js backend development, DevOps, cloud environments, and sometimes a frontend developer with Angular.
+            Searching, improving, building — every single day.
           </p>
 
           <div class="flex flex-wrap gap-4 social-links-container justify-center md:justify-start theme-transition-children">
@@ -84,9 +84,48 @@ const skills = [
 
         <div class="prose prose-zinc dark:prose-invert max-w-none theme-transition-all">
           <p class="text-base sm:text-lg leading-relaxed mb-4 sm:mb-6 theme-transition-color">
-            I'm a software architect, I have a passion for building scalable and efficient systems.
-            With many years of experience in the different industries, I've worked on a variety of projects from small personal
-            projects to large enterprise applications.
+            I'm a software engineer and an R&D Manager at <a href="https://www.trigenia.it" target="_blank" class="text-zinc-900 dark:text-zinc-100 hover:text-zinc-700 dark:hover:text-zinc-300 transition-all duration-300 theme-transition-color">Trigenia</a>,
+            where I lead the development of new products and features.
+            I define the architecture of our systems and oversee the infrastructure that supports them.
+            Over the years I've worked across multiple industries, delivering projects ranging from small personal tools to large enterprise platforms.
+          </p>
+        </div>
+
+        <h3 class="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 sm:mb-8 mt-12 flex items-center justify-center md:justify-start theme-transition-color">
+          <span class="hidden sm:inline-block w-8 sm:w-12 h-1 bg-zinc-300 dark:bg-zinc-700 mr-4 theme-transition-bg"></span>
+          My mission
+          <span class="hidden sm:inline-block w-8 sm:w-12 h-1 bg-zinc-300 dark:bg-zinc-700 ml-4 theme-transition-bg"></span>
+        </h3>
+
+        <div class="prose prose-zinc dark:prose-invert max-w-none theme-transition-all">
+          <p class="text-base sm:text-lg leading-relaxed mb-4 sm:mb-6 theme-transition-color">
+            I believe that reliable software and clean infrastructure are the foundation of sustainable digital products.
+            On this blog I share what I learn about building real-world production systems: AI, architecture patterns, IaC,
+            container and Kubernetes, full-stack integration, monitoring and observability.
+            <br><br>
+            If you also care about code quality, maintainability, and deployment automation — this site is for you.
+          </p>
+        </div>
+
+        <h3 class="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 sm:mb-8 flex items-center justify-center md:justify-start theme-transition-color mt-12">
+          <span class="hidden sm:inline-block w-8 sm:w-12 h-1 bg-zinc-300 dark:bg-zinc-700 mr-4 theme-transition-bg"></span>
+          What I know (tech & workflow)
+          <span class="hidden sm:inline-block w-8 sm:w-12 h-1 bg-zinc-300 dark:bg-zinc-700 ml-4 theme-transition-bg"></span>
+        </h3>
+
+        <div class="prose prose-zinc dark:prose-invert max-w-none theme-transition-all">
+          <p class="text-base sm:text-lg leading-relaxed mb-4 sm:mb-6 theme-transition-color">
+            <ul class="list-disc list-inside">
+              <li>TypeScript and Node.js</li>
+              <li>Fastify — building APIs and services</li>
+              <li>Database — PostgreSQL, MongoDB, Redis, TimescaleDB, Elasticsearch</li>
+              <li>Angular — for frontend when needed</li>
+              <li>Docker / containerization — building and running applications in containers</li>
+              <li>Kubernetes — manage the infrastructure and deploy the applications</li>
+              <li>Terraform / IaC — infrastructure as code for reproducible environments</li>
+              <li>DevOps & Cloud workflows — CI/CD, pipelines, deployment automation</li>
+              <li>Cloud providers — Azure and AWS</li>
+            </ul>
           </p>
 
           <!-- Other paragraphs remain the same -->
@@ -94,12 +133,11 @@ const skills = [
       </div>
     </div>
 
-    <!-- Skills Section - Improved for mobile -->
+    <!-- Skills Section - Improved for mobile
     <div class="mb-16 sm:mb-20 md:mb-24 theme-transition-all">
       <h2 class="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-8 sm:mb-12 text-center theme-transition-color">Tech Stack</h2>
 
       <div class="tech-stack-slider relative overflow-hidden py-4 sm:py-8">
-        <!-- Main slider container -->
         <div class="slider-track flex animate-slide">
           {[...skills, ...skills, ...skills].map((skill, index) => (
             <div key={`${skill.name}-${index}`} class="skill-card min-w-[220px] sm:min-w-[280px] mx-2 sm:mx-4 bg-white dark:bg-zinc-800/50 rounded-xl border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600 transition-all duration-300 hover:shadow-xl transform hover:-translate-y-2 hover:scale-105 theme-transition-element">
@@ -130,11 +168,12 @@ const skills = [
           ))}
         </div>
 
-        <!-- Gradient overlays for smooth fade effect -->
+        <!-- Gradient overlays for smooth fade effect
         <div class="absolute top-0 bottom-0 left-0 w-12 sm:w-24 bg-gradient-to-r from-white dark:from-zinc-900 to-transparent z-10 theme-transition-bg"></div>
         <div class="absolute top-0 bottom-0 right-0 w-12 sm:w-24 bg-gradient-to-l from-white dark:from-zinc-900 to-transparent z-10 theme-transition-bg"></div>
       </div>
     </div>
+    -->
 
     <!-- Contact Section - Improved for mobile -->
     <div class="max-w-3xl mx-auto text-center theme-transition-all">
@@ -144,15 +183,30 @@ const skills = [
         feel free to reach out.
       </p>
 
-      <a
-        href="mailto:hello@example.com"
-        class="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-300 transition-colors text-base sm:text-lg font-medium theme-transition-all"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
-        Say Hello
-      </a>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a
+          href="https://github.com/rommelandrea"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-300 transition-colors text-base sm:text-lg font-medium theme-transition-all"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+          </svg>
+          GitHub
+        </a>
+        <a
+          href="https://linkedin.com/in/andrea-romanello"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-300 transition-colors text-base sm:text-lg font-medium theme-transition-all"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
+          </svg>
+          LinkedIn
+        </a>
+      </div>
     </div>
   </div>
 </BaseLayout>
