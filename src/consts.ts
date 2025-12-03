@@ -3,4 +3,4 @@
 
 export const SITE_TITLE = 'Andrea Romanello';
 export const SITE_DESCRIPTION = 'Welcome to my personal website';
-export const SITE_URL = 'https://rommelandrea.github.io';
+export const SITE_URL = 'https://andrearomanello.com';

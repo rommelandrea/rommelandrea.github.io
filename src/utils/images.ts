@@ -268,5 +268,3 @@ export function isValidImagePath(path: string | undefined): boolean {
 
   return false;
 }
-
-

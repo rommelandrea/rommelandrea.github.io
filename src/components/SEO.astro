@@ -1,5 +1,5 @@
 ---
-import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from '../consts';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 export interface Props {
   title: string;
@@ -23,9 +23,29 @@ const {
   tags = [],
 } = Astro.props;
 
+// Get site URL from Astro config and normalize (remove trailing slash)
+const siteUrl = (Astro.site?.href || Astro.url.origin).replace(/\/$/, '');
+
+// Helper to join URL parts without double slashes
+const joinUrl = (base: string, path: string) => {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${base}${normalizedPath}`;
+};
+
 // Construct full URL
-const fullUrl = url ? `${SITE_URL}${url}` : Astro.url.href;
-const fullImage = image ? `${SITE_URL}${image}` : `${SITE_URL}/favicon.svg`;
+// If url is provided, check if it's already a full URL or a relative path
+const fullUrl = url
+  ? url.startsWith('http://') || url.startsWith('https://')
+    ? url
+    : joinUrl(siteUrl, url)
+  : Astro.url.href;
+
+// Construct full image URL (images should be relative paths)
+const fullImage = image
+  ? image.startsWith('http://') || image.startsWith('https://')
+    ? image
+    : joinUrl(siteUrl, image)
+  : joinUrl(siteUrl, '/favicon.svg');
 const pageTitle = title.includes(SITE_TITLE)
   ? title
   : `${title} | ${SITE_TITLE}`;
@@ -69,5 +89,3 @@ const pageTitle = title.includes(SITE_TITLE)
     ))}
   </>
 )}
-
-
