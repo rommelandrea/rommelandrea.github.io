@@ -19,7 +19,7 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://rommelandrea.github.io',
+  site: 'https://andrearomanello.com',
   // base: '/rommelandrea.github.io',
   integrations: [tailwind(), react(), sitemap()],
 });
