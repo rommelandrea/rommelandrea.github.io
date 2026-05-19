@@ -1,0 +1,6 @@
+allowBuilds:
+  esbuild: true
+  sharp: false
+minimumReleaseAgeExclude:
+  - '@astrojs/db@0.21.2'
+  - astro@6.3.5
