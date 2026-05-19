@@ -106,7 +106,7 @@ const allTags = [
                 </div>
 
                 <h2 class="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-3 sm:mb-4 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 transition-colors text-center md:text-left">
-                  <a href={`/blog/${sortedPosts[0].slug}/`} class="before:absolute before:inset-0">
+                  <a href={`/blog/${sortedPosts[0].id.replace(/\.mdx?$/, '')}/`} class="before:absolute before:inset-0">
                     {sortedPosts[0].data.title}
                   </a>
                 </h2>
@@ -201,7 +201,7 @@ const allTags = [
                     </div>
 
                     <h3 class="text-lg sm:text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2 sm:mb-3 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 transition-colors text-center md:text-left">
-                      <a href={`/blog/${post.slug}/`} class="before:absolute before:inset-0">
+                      <a href={`/blog/${post.id.replace(/\.mdx?$/, '')}/`} class="before:absolute before:inset-0">
                         {post.data.title}
                       </a>
                     </h3>

@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import readingTime from 'reading-time';
 import BlogPost from '../../layouts/BlogPost.astro';
 
@@ -27,7 +27,7 @@ export async function getStaticPaths() {
     }
 
     return {
-      params: { slug: entry.slug },
+      params: { slug: entry.id.replace(/\.mdx?$/, '') },
       props: {
         entry,
         readingTimeValue: readingTimeStr,
@@ -44,7 +44,7 @@ const { entry, nextPost, prevPost, readingTimeValue, readingTimeStats } =
   Astro.props;
 
 // Render the entry content
-const { Content } = await entry.render();
+const { Content } = await render(entry);
 
 // Override readingTime from frontmatter if available, otherwise use calculated value
 const finalReadingTime = entry.data.readingTime || readingTimeValue;
@@ -62,7 +62,7 @@ const finalReadingTime = entry.data.readingTime || readingTimeValue;
       <div class="mt-8 sm:mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 border-t border-zinc-200 dark:border-zinc-800 pt-6 sm:pt-8 md:pt-12">
         {prevPost && !prevPost.data.draft && (
           <a 
-            href={`/blog/${prevPost.slug}`} 
+            href={`/blog/${prevPost.id.replace(/\.mdx?$/, '')}`} 
             class="group relative flex flex-col h-full p-4 sm:p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
           >
             <div class="absolute inset-0 bg-gradient-to-r from-zinc-100 to-transparent dark:from-zinc-800 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -79,7 +79,7 @@ const finalReadingTime = entry.data.readingTime || readingTimeValue;
         )}
         {nextPost && !nextPost.data.draft && (
           <a 
-            href={`/blog/${nextPost.slug}`} 
+            href={`/blog/${nextPost.id.replace(/\.mdx?$/, '')}`} 
             class="group relative flex flex-col h-full p-4 sm:p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all duration-300 hover:-translate-y-1 md:text-right overflow-hidden"
           >
             <div class="absolute inset-0 bg-gradient-to-l from-zinc-100 to-transparent dark:from-zinc-800 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

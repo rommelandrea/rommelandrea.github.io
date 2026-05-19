@@ -21,7 +21,7 @@ export async function GET(context) {
       title: post.data.title,
       pubDate: post.data.pubDate,
       description: post.data.description,
-      link: `/blog/${post.slug}/`,
+      link: `/blog/${post.id.replace(/\.mdx?$/, '')}/`,
       // Optional: include categories/tags as array
       categories: post.data.tags || [],
     })),
